@@ -1,0 +1,104 @@
+openapi: 3.1.0
+info:
+  title: API Inventaris Barang
+  description: API untuk mengelola kategori dan produk (Sesuai Modul Praktikum OOP)
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000
+tags:
+  - name: Categories
+  - name: Products
+paths:
+  /api/v1/categories:
+    get:
+      tags: [Categories]
+      summary: Mengambil semua kategori
+      responses: { "200": { description: OK } }
+    post:
+      tags: [Categories]
+      summary: Menambah kategori
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/CategoryInput" }
+      responses: { "201": { description: Created } }
+  /api/v1/categories/{id}:
+    get:
+      tags: [Categories]
+      parameters: [{ name: id, in: path, required: true, schema: { type: integer } }]
+      responses: { "200": { description: OK } }
+    put:
+      tags: [Categories]
+      parameters: [{ name: id, in: path, required: true, schema: { type: integer } }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/CategoryInput" }
+      responses: { "200": { description: OK } }
+    delete:
+      tags: [Categories]
+      parameters: [{ name: id, in: path, required: true, schema: { type: integer } }]
+      responses: { "204": { description: No Content } }
+  /api/v1/products:
+    get:
+      tags: [Products]
+      summary: Mengambil semua produk (Search & Pagination)
+      parameters:
+        - name: search
+          in: query
+          description: Cari produk berdasarkan nama
+          schema: { type: string }
+        - name: page
+          in: query
+          description: Halaman ke-berapa
+          schema: { type: integer, default: 1 }
+        - name: limit
+          in: query
+          description: Jumlah data per halaman
+          schema: { type: integer, default: 10 }
+      responses: { "200": { description: OK } }
+    post:
+      tags: [Products]
+      summary: Menambah produk
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ProductInput" }
+      responses: { "201": { description: Created } }
+  /api/v1/products/{id}:
+    get:
+      tags: [Products]
+      parameters: [{ name: id, in: path, required: true, schema: { type: integer } }]
+      responses: { "200": { description: OK } }
+    put:
+      tags: [Products]
+      parameters: [{ name: id, in: path, required: true, schema: { type: integer } }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ProductInput" }
+      responses: { "200": { description: OK } }
+    delete:
+      tags: [Products]
+      parameters: [{ name: id, in: path, required: true, schema: { type: integer } }]
+      responses: { "204": { description: No Content } }
+components:
+  schemas:
+    CategoryInput:
+      type: object
+      required: [name]
+      properties:
+        name: { type: string }
+        description: { type: string }
+    ProductInput:
+      type: object
+      required: [category_id, name, price, stock]
+      properties:
+        category_id: { type: integer }
+        name: { type: string }
+        price: { type: number }
+        stock: { type: integer }
